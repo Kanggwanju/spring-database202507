@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest // 스프링 컨텍스트에서 관리되는 빈을 꺼내올 수 있음
@@ -51,7 +53,7 @@ class BookRepositoryTest {
                 .id(6L)
                 .build();
         //when
-        boolean flag = bookRepository.updateTitleAndAuthor(updatedBook);
+        boolean flag = bookRepository.updateTitleAndAuthor(updatedBook, 6L);
         //then
         assertTrue(flag);
     }
@@ -66,6 +68,38 @@ class BookRepositoryTest {
         boolean flag = bookRepository.deleteById(givenId);
         //then
         assertTrue(flag);
+    }
+
+    @Test
+    @DisplayName("전체조회를 하면 도서의 리스트가 반환된다.")
+    void findAllTest() {
+        //given
+
+        //when
+        List<Book> bookList = bookRepository.findAll();
+        //then
+        bookList.forEach(System.out::println);
+
+        assertEquals(5, bookList.size());
+        assertNotNull(bookList.get(0));
+        assertEquals("반지의 제왕", bookList.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("적합한 id를 통해 개별조회를 하면 도서 1개의 객체가 반환된다.")
+    void findOneTest() {
+        //given
+        Long givenId = 5L;
+
+        //when
+        Book foundBook = bookRepository.findById(givenId);
+
+        //then
+        System.out.println("foundBook = " + foundBook);
+
+        assertNotNull(foundBook);
+        assertTrue(foundBook.isAvailable());
+        assertEquals("꿀잼책", foundBook.getTitle());
     }
 
 }

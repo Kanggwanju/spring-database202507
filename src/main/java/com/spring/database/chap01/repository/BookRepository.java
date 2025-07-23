@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 // 역할: 데이터베이스에 접근해서 CRUD를 수행하는 객체
 @RequiredArgsConstructor
@@ -42,7 +47,7 @@ public class BookRepository {
     }
 
     // 도서 제목, 저자 수정
-    public boolean updateTitleAndAuthor(Book book) {
+    public boolean updateTitleAndAuthor(Book book, Long id) {
         try (Connection conn = dataSource.getConnection()) {
 
             String sql = """
@@ -54,7 +59,7 @@ public class BookRepository {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, book.getAuthor());
             pstmt.setString(2, book.getTitle());
-            pstmt.setLong(3, book.getId());
+            pstmt.setLong(3, id);
 
             int result = pstmt.executeUpdate();
             return result == 1;
@@ -84,4 +89,63 @@ public class BookRepository {
             return false;
         }
     }
+
+    // 전체 조회 - ORM (Object Relational Mapping)
+    public List<Book> findAll() {
+
+        List<Book> bookList = new ArrayList<>();
+
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = """
+                        SELECT * FROM BOOKS
+                    """;
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                /*long id = rs.getLong("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                String isbn = rs.getString("isbn");
+                boolean available = rs.getBoolean("available");
+                LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
+
+                Book book = new Book(id, title, author, isbn, available, createdAt);*/
+
+                Book book = new Book(rs);
+                bookList.add(book);
+//                System.out.println("book = " + book);
+//                System.out.println("==========================");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bookList;
+    }
+
+    // id로 단일조회 메서드
+    public Book findById(Long id) {
+        try (Connection conn = dataSource.getConnection()) {
+
+            String sql = """
+                        SELECT * FROM BOOKS
+                        WHERE id = ?
+                    """;
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, id);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) return new Book(rs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
