@@ -66,7 +66,22 @@ public class BookRepository {
     }
 
     // 도서 정보 삭제
-    public boolean deleteById() {
-        return true;
+    public boolean deleteById(Long id) {
+        try (Connection conn = dataSource.getConnection()) {
+
+            String sql = """
+                DELETE FROM BOOKS
+                WHERE id = ?
+                """;
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, id);
+
+            return pstmt.executeUpdate() == 1;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

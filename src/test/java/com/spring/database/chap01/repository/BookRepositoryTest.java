@@ -56,8 +56,16 @@ class BookRepositoryTest {
         assertTrue(flag);
     }
 
-
-
-
+    @Test
+//    @DisplayName("도서 Id 정보를 주면 데이터베이스 book 테이블에서 그 도서가 삭제된다.")
+    @DisplayName("id를 주면 book 테이블에서 해당 id를 가진 행이 삭제된다.")
+    void deleteTest() {
+        //given
+        Long givenId = 4L;
+        //when
+        boolean flag = bookRepository.deleteById(givenId);
+        //then
+        assertTrue(flag);
+    }
 
 }
