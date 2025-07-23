@@ -1,4 +1,4 @@
-package com.spring.database.chap01.pokemon.entity.repository;
+package com.spring.database.chap01.pokemon.repository;
 
 import com.spring.database.chap01.entity.Book;
 import com.spring.database.chap01.pokemon.entity.Pokemon;
@@ -45,7 +45,7 @@ public class PokemonRepository {
     }
 
     // 포켓몬 정보 수정
-    public boolean updatePokemonStatus(Pokemon pokemon) {
+    public boolean updatePokemonStatus(Pokemon pokemon, Long id) {
         try(Connection conn = dataSource.getConnection()) {
 
             String sql = """
@@ -59,7 +59,7 @@ public class PokemonRepository {
             pstmt.setInt(2, pokemon.getAttack());
             pstmt.setInt(3, pokemon.getDefense());
             pstmt.setInt(4, pokemon.getSpeed());
-            pstmt.setLong(5, pokemon.getId());
+            pstmt.setLong(5, id);
 
             return pstmt.executeUpdate() == 1;
 
@@ -137,8 +137,13 @@ public class PokemonRepository {
     }
     
     // 포켓몬 공격 메서드
-    public boolean pokemonAttack(Pokemon attacker, Pokemon defender) {
+    public boolean pokemonAttack(Long attackerId, Long defenderId) {
         try (Connection conn = dataSource.getConnection()) {
+
+            Pokemon attackerPokemon = findById(attackerId);
+            Pokemon defenderPokemon = findById(defenderId);
+
+            int defenderHp = performAttack(attackerPokemon, defenderPokemon);
 
             String sql = """
                     UPDATE POKEMON
@@ -147,8 +152,8 @@ public class PokemonRepository {
                     """;
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
-            pstmt.setInt(1, defender.getHp() + performAttack(attacker, defender));
-            pstmt.setLong(2, defender.getId());
+            pstmt.setInt(1, defenderHp);
+            pstmt.setLong(2, defenderPokemon.getId());
 
             return pstmt.executeUpdate() == 1;
 
@@ -164,7 +169,8 @@ public class PokemonRepository {
         if (power >= 0) {
             power = 0;
         }
-        return power;
+
+        return defender.getHp() + power;
     }
 
 }

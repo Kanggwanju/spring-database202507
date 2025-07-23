@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>포켓몬 관리</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        input, select {
+            padding: 10px;
+            margin: 5px;
+            width: calc(50% - 12px);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #eef;
+            border-radius: 4px;
+        }
+        .pokemon-list li {
+            padding: 4px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🧩 확장된 포켓몬 관리</h2>
+
+        <!-- 정렬 및 목록 -->
+        <div>
+            <select id="sortSelect">
+                <option value="">정렬 없음</option>
+                <option value="name">이름순</option>
+                <option value="hp">HP순</option>
+                <option value="level">레벨순</option>
+            </select>
+            <button onclick="fetchPokemonList()">목록 조회</button>
+            <ul id="pokemonList" class="pokemon-list"></ul>
+        </div>
+
+        <hr>
+
+        <!-- 등록 -->
+        <h4>📦 포켓몬 등록</h4>
+        <input type="text" id="newName" placeholder="이름 입력" />
+        <input type="text" id="newType" placeholder="타입 입력 (예: 불, 물)" />
+        <input type="number" id="newHp" placeholder="HP 입력" />
+        <input type="number" id="newAttack" placeholder="공격력 입력" />
+        <input type="number" id="newDefense" placeholder="방어력 입력" />
+        <input type="number" id="newSpeed" placeholder="스피드 입력" />
+        <button onclick="registerPokemon()">등록</button>
+
+        <hr>
+
+        <!-- 공격 -->
+        <h4>⚔️ 포켓몬 공격</h4>
+        <input type="number" id="attackerId" placeholder="공격자 ID" />
+        <input type="number" id="defenderId" placeholder="방어자 ID" />
+        <button onclick="attackPokemon()">공격!</button>
+
+        <hr>
+
+        <!-- 삭제 -->
+        <h4>🗑️ 포켓몬 삭제</h4>
+        <input type="number" id="deleteId" placeholder="삭제할 포켓몬 ID" />
+        <button onclick="deletePokemon()">삭제</button>
+
+        <!-- 결과 출력 -->
+        <div id="resultArea" class="result"></div>
+    </div>
+
+    <script>
+      const baseUrl = "http://localhost:9001/api/v1/pokemon";
+
+      // 포켓몬 목록 조회
+      async function fetchPokemonList() {
+        const sort = document.getElementById("sortSelect").value;
+        const res = await fetch(`${baseUrl}${sort ? `?sort=${sort}` : ""}`);
+        const data = await res.json();
+        const listEl = document.getElementById("pokemonList");
+        listEl.innerHTML = "";
+        data.forEach(pokemon => {
+          const li = document.createElement("li");
+          li.textContent = `ID: ${pokemon.id}, 이름: ${pokemon.name}, 타입: ${pokemon.type1}, HP: ${pokemon.hp}, 공격력: ${pokemon.attack}, 방어력: ${pokemon.defense}`;
+          listEl.appendChild(li);
+        });
+      }
+
+      // 등록
+      async function registerPokemon() {
+        const name = document.getElementById("newName").value;
+        const type1 = document.getElementById("newType").value;
+        const hp = document.getElementById("newHp").value;
+        const attack = document.getElementById("newAttack").value;
+        const defense = document.getElementById("newDefense").value;
+        const speed = document.getElementById("newSpeed").value;
+
+        const res = await fetch(baseUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, type1, hp, attack, defense, speed })
+        });
+        const text = await res.text();
+        showResult("✅ 등록 완료: " + text);
+        fetchPokemonList();
+      }
+
+      // 공격
+      async function attackPokemon() {
+        const attackerId = document.getElementById("attackerId").value;
+        const defenderId = document.getElementById("defenderId").value;
+        const res = await fetch(`${baseUrl}/${attackerId}/attack/${defenderId}`, {
+          method: "POST"
+        });
+        const text = await res.text();
+        showResult("⚔️ 공격 결과: " + text);
+        fetchPokemonList();
+      }
+
+      // 삭제
+      async function deletePokemon() {
+        const id = document.getElementById("deleteId").value;
+        const res = await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
+        const text = await res.text();
+        showResult("🗑️ 삭제 결과: " + text);
+        fetchPokemonList();
+      }
+
+      // 결과 메시지 출력
+      function showResult(msg) {
+        document.getElementById("resultArea").textContent = msg;
+      }
+
+      window.onload = fetchPokemonList;
+    </script>
+</body>
+</html>

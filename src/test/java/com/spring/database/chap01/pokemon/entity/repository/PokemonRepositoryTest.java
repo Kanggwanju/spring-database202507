@@ -1,7 +1,7 @@
 package com.spring.database.chap01.pokemon.entity.repository;
 
-import com.spring.database.chap01.entity.Book;
 import com.spring.database.chap01.pokemon.entity.Pokemon;
+import com.spring.database.chap01.pokemon.repository.PokemonRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +41,7 @@ class PokemonRepositoryTest {
     @DisplayName("포켓몬의 체력, 공격력, 방어력, 속도를 수정해야 한다.")
     void updateTest() {
         //given
+        Long givenId = 2L;
         Pokemon updatedPokemon = Pokemon.builder()
                 .hp(250)
                 .attack(45)
@@ -49,7 +50,7 @@ class PokemonRepositoryTest {
                 .id(2L)
                 .build();
         //when
-        boolean flag = pokemonRepository.updatePokemonStatus(updatedPokemon);
+        boolean flag = pokemonRepository.updatePokemonStatus(updatedPokemon, givenId);
         //then
         assertTrue(flag);
     }
@@ -100,19 +101,14 @@ class PokemonRepositoryTest {
     @DisplayName("공격하는 포켓몬의 공격력과 방어하는 포켓몬의 방어력을 비교하여 차이만큼 방어하는 포켓몬의 체력이 작아진다.")
     void attackTest() {
         //given
-        Pokemon attackingPokemon = pokemonRepository.findById(4L);
-        Pokemon defendingPokemon = pokemonRepository.findById(3L);
+        Long givenAttackerId = 4L;
+        Long givenDefenderId = 3L;
 
         //when
-        boolean flag = pokemonRepository.pokemonAttack(attackingPokemon, defendingPokemon);
+        boolean flag = pokemonRepository.pokemonAttack(givenAttackerId, givenDefenderId);
 
         //then
         assertTrue(flag);
     }
-
-    
-    
-    
-
 
 }
