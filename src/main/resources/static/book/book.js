@@ -1,10 +1,10 @@
 // 백엔드 API 서버의 기본 URL
-const URL = '/api/v2-4/books';
+const URL = '/api/v1/books';
 
 //=========== 렌더링 관련 함수 ============//
 
 // 책 목록을 화면에 렌더링하는 함수
-const renderBooks = ({bookList, count}) => {
+const renderBooks = (bookList) => {
   // 1. 책 목록을 담을 ul 태그와 총 권수를 표시할 태그를 가져옵니다.
   const $bookList = document.querySelector('.book-list');
   const $bookCount = document.querySelector('.book-count');
@@ -14,7 +14,7 @@ const renderBooks = ({bookList, count}) => {
   $bookList.innerHTML = '';
 
   // 3. 총 권수를 업데이트합니다.
-  $bookCount.textContent = count;
+  $bookCount.textContent = bookList.length;
 
   // 4. 받아온 책 목록(bookList)을 순회하면서 li 태그를 생성합니다.
   bookList.forEach(book => {
@@ -28,7 +28,7 @@ const renderBooks = ({bookList, count}) => {
           <p>${book.author}</p>
       </div>
       <div class="price">
-          <span>${book.price}원</span>
+          <span>${book.isbn}</span>
           <button class="del-btn">삭제</button>
       </div>
     `;
@@ -50,13 +50,13 @@ const fetchGetBooks = async (sort = 'id') => {
 
 // 서버에 책을 등록하는 비동기 함수
 const fetchPostBook = async () => {
-  // 1. 폼에서 사용자가 입력한 제목, 저자, 가격 정보를 가져옵니다.
+  // 1. 폼에서 사용자가 입력한 제목, 저자, isbn 정보를 가져옵니다.
   const $titleInput = document.getElementById('title');
   const $authorInput = document.getElementById('author');
-  const $priceInput = document.getElementById('price');
+  const $isbnInput = document.getElementById('isbn');
 
   // 2. 입력값이 모두 채워졌는지 간단히 확인합니다.
-  if (!$titleInput.value.trim() || !$authorInput.value.trim() || !$priceInput.value) {
+  if (!$titleInput.value.trim() || !$authorInput.value.trim() || !$isbnInput.value) {
     alert('모든 필드를 채워주세요!');
     return;
   }
@@ -65,18 +65,20 @@ const fetchPostBook = async () => {
   const payload = {
     title: $titleInput.value,
     author: $authorInput.value,
-    price: +$priceInput.value, // '+'를 붙여 숫자 타입으로 변환
+    isbn: $isbnInput.value,
   };
 
   // 4. fetch를 사용하여 POST 요청을 보냅니다.
-  await fetch(`${URL}?title=${payload.title}&author=${payload.author}&price=${payload.price}`, {
-    method: 'POST'
+  await fetch(`${URL}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
   });
 
   // 5. 등록이 완료된 후, 입력창을 비우고 목록을 새로고침합니다.
   $titleInput.value = '';
   $authorInput.value = '';
-  $priceInput.value = '';
+  $isbnInput.value = '';
 
   await fetchGetBooks(); // 목록 새로고침
 };

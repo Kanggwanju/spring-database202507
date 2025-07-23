@@ -53,7 +53,7 @@ class BookRepositoryTest {
                 .id(6L)
                 .build();
         //when
-        boolean flag = bookRepository.updateTitleAndAuthor(updatedBook, 6L);
+        boolean flag = bookRepository.updateTitleAndAuthor(updatedBook);
         //then
         assertTrue(flag);
     }

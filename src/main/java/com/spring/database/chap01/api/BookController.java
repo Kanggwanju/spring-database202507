@@ -31,8 +31,8 @@ public class BookController {
 
     // 수정 요청
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBook(@RequestBody Book book, @PathVariable Long id) {
-        bookRepository.updateTitleAndAuthor(book, id);
+    public ResponseEntity<?> updateBook(@RequestBody Book book) {
+        bookRepository.updateTitleAndAuthor(book);
         return ResponseEntity.ok("도서 수정 성공!");
     }
 

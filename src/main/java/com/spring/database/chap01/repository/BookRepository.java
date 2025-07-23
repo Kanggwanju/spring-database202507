@@ -47,7 +47,7 @@ public class BookRepository {
     }
 
     // 도서 제목, 저자 수정
-    public boolean updateTitleAndAuthor(Book book, Long id) {
+    public boolean updateTitleAndAuthor(Book book) {
         try (Connection conn = dataSource.getConnection()) {
 
             String sql = """
@@ -59,7 +59,7 @@ public class BookRepository {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, book.getAuthor());
             pstmt.setString(2, book.getTitle());
-            pstmt.setLong(3, id);
+            pstmt.setLong(3, book.getId());
 
             int result = pstmt.executeUpdate();
             return result == 1;
