@@ -12,8 +12,16 @@ CREATE TABLE IF NOT EXISTS books (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='도서 정보';
  */
 
-import java.time.LocalDateTime;
+import lombok.*;
 
+import java.time.LocalDateTime;
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Book {
 
     private Long id;
