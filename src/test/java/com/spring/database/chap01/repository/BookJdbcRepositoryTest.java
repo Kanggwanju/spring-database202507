@@ -2,7 +2,6 @@ package com.spring.database.chap01.repository;
 
 import com.spring.database.chap01.entity.Book;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.AutoClose;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +12,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest // 스프링 컨텍스트에서 관리되는 빈을 꺼내올 수 있음
-class BookRepositoryTest {
+class BookJdbcRepositoryTest {
 
     // 테스트 프레임워크: JUint
     // 5버전에서부터는 생성자주입을 막아놓음 - 필드 주입 해야함
     // 스프링이 우리 대신 필드 주입 해줌
     @Autowired
-    BookRepository bookRepository;
+    BookJdbcRepository bookJdbcRepository;
 
     // 테스트 메서드
     @Test
@@ -34,7 +33,7 @@ class BookRepositoryTest {
             .isbn("D004")
             .build();
         // when - 실제 테스트가 벌어지는 상황
-        boolean flag = bookRepository.save(givenBook);
+        boolean flag = bookJdbcRepository.save(givenBook);
 //        System.out.println("flag = " + flag);
 
         // then - 테스트 결과 (단언)
@@ -53,7 +52,7 @@ class BookRepositoryTest {
                 .id(6L)
                 .build();
         //when
-        boolean flag = bookRepository.updateTitleAndAuthor(updatedBook);
+        boolean flag = bookJdbcRepository.updateTitleAndAuthor(updatedBook);
         //then
         assertTrue(flag);
     }
@@ -65,7 +64,7 @@ class BookRepositoryTest {
         //given
         Long givenId = 4L;
         //when
-        boolean flag = bookRepository.deleteById(givenId);
+        boolean flag = bookJdbcRepository.deleteById(givenId);
         //then
         assertTrue(flag);
     }
@@ -76,7 +75,7 @@ class BookRepositoryTest {
         //given
 
         //when
-        List<Book> bookList = bookRepository.findAll();
+        List<Book> bookList = bookJdbcRepository.findAll();
         //then
         bookList.forEach(System.out::println);
 
@@ -92,7 +91,7 @@ class BookRepositoryTest {
         Long givenId = 5L;
 
         //when
-        Book foundBook = bookRepository.findById(givenId);
+        Book foundBook = bookJdbcRepository.findById(givenId);
 
         //then
         System.out.println("foundBook = " + foundBook);
