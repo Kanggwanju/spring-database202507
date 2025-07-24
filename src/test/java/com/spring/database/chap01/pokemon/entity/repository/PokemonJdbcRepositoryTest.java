@@ -1,7 +1,7 @@
 package com.spring.database.chap01.pokemon.entity.repository;
 
 import com.spring.database.chap01.pokemon.entity.Pokemon;
-import com.spring.database.chap01.pokemon.repository.PokemonRepository;
+import com.spring.database.chap01.pokemon.repository.PokemonJdbcRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,10 +13,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class PokemonRepositoryTest {
+class PokemonJdbcRepositoryTest {
     
     @Autowired
-    PokemonRepository pokemonRepository;
+    PokemonJdbcRepository pokemonJdbcRepository;
     
     @Test
     @DisplayName("포켓몬 정보를 주면 데이터베이스 pokemon 테이블에 저장된다.")
@@ -31,7 +31,7 @@ class PokemonRepositoryTest {
                 .speed(30)
                 .build();
         //when
-        boolean flag = pokemonRepository.save(givenPokemon);
+        boolean flag = pokemonJdbcRepository.save(givenPokemon);
 
         //then
         Assertions.assertTrue(flag);
@@ -41,16 +41,16 @@ class PokemonRepositoryTest {
     @DisplayName("포켓몬의 체력, 공격력, 방어력, 속도를 수정해야 한다.")
     void updateTest() {
         //given
-        Long givenId = 2L;
+        Long givenId = 4L;
         Pokemon updatedPokemon = Pokemon.builder()
-                .hp(250)
+                .hp(450)
                 .attack(45)
-                .defense(40)
-                .speed(50)
-                .id(2L)
+                .defense(20)
+                .speed(10)
+                .id(4L)
                 .build();
         //when
-        boolean flag = pokemonRepository.updatePokemonStatus(updatedPokemon, givenId);
+        boolean flag = pokemonJdbcRepository.updatePokemonStatus(updatedPokemon, givenId);
         //then
         assertTrue(flag);
     }
@@ -61,7 +61,7 @@ class PokemonRepositoryTest {
         //given
         Long givenId = 2L;
         //when
-        boolean flag = pokemonRepository.deleteById(givenId);
+        boolean flag = pokemonJdbcRepository.deleteById(givenId);
         //then
         assertTrue(flag);
     }
@@ -72,7 +72,7 @@ class PokemonRepositoryTest {
         //given
 
         //when
-        List<Pokemon> pokemonList = pokemonRepository.findAll();
+        List<Pokemon> pokemonList = pokemonJdbcRepository.findAll();
         //then
         pokemonList.forEach(System.out::println);
 
@@ -88,7 +88,7 @@ class PokemonRepositoryTest {
         Long givenId = 4L;
 
         //when
-        Pokemon foundPokemon = pokemonRepository.findById(givenId);
+        Pokemon foundPokemon = pokemonJdbcRepository.findById(givenId);
 
         //then
         System.out.println("foundPokemon = " + foundPokemon);
@@ -105,7 +105,7 @@ class PokemonRepositoryTest {
         Long givenDefenderId = 3L;
 
         //when
-        boolean flag = pokemonRepository.pokemonAttack(givenAttackerId, givenDefenderId);
+        boolean flag = pokemonJdbcRepository.pokemonAttack(givenAttackerId, givenDefenderId);
 
         //then
         assertTrue(flag);

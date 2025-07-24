@@ -2,18 +2,21 @@ package com.spring.database.chap01.pokemon.api;
 
 import com.spring.database.chap01.pokemon.entity.Pokemon;
 import com.spring.database.chap01.pokemon.repository.PokemonRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/pokemon")
-@RequiredArgsConstructor
 @Slf4j
 public class PokemonController {
 
     private final PokemonRepository pokemonRepository;
+
+    public PokemonController(@Qualifier("psr") PokemonRepository pokemonRepository) {
+        this.pokemonRepository = pokemonRepository;
+    }
 
     // 전체 조회 요청
     @GetMapping
