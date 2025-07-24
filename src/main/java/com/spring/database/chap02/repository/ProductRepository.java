@@ -20,13 +20,6 @@ import java.util.Map;
 public class ProductRepository {
 
     private final JdbcTemplate template;
-    private final InternalResourceViewResolver internalResourceViewResolver;
-
-
-    // 상품의 기본적인 CRUD를 5개
-    // 생성, 수정, 삭제(논리적 삭제), 전체조회, 단일조회
-
-    // 전체 상품의 총액과 평균 가격을 가져오는 기능
 
     // 상품 추가
     public boolean save(Product product) {
