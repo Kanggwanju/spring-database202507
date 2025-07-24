@@ -5,10 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 // Spring JDBC로 도서 CRUD를 관리
-@Repository
+@Repository("bsr")
 @RequiredArgsConstructor
 public class BookSpringRepository implements BookRepository {
 
@@ -34,12 +37,31 @@ public class BookSpringRepository implements BookRepository {
 
     @Override
     public boolean updateTitleAndAuthor(Book book) {
-        return false;
+        String sql = """
+                    UPDATE BOOKS
+                    SET author = ?, title = ?
+                    WHERE id = ?
+                    """;
+
+        return template.update(
+                sql,
+                book.getAuthor(),
+                book.getTitle(),
+                book.getId()
+        ) == 1;
     }
 
     @Override
     public boolean deleteById(Long id) {
-        return false;
+        String sql = """
+                    DELETE FROM BOOKS
+                    WHERE id = ?
+                    """;
+
+        return template.update(
+                sql,
+                id
+        ) == 1;
     }
 
     @Override
