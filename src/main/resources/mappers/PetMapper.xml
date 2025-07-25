@@ -39,7 +39,7 @@
     <select id="findAll" resultType="Pet">
         SELECT *
         FROM tbl_pet
-        WHERE id = #{id}
+        ORDER BY pet_name
     </select>
 
     <select id="petCount" resultType="int">
