@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace에는 연결할 인터페이스의 풀네임(패키지명+클래스명)을 작성 -->
+<mapper namespace="com.spring.database.pokemon.PokemonMapper">
+
+    <!--  id에는 연결된 인터페이스의 추상메서드 이름을 정확하게 적음  -->
+    <insert id="save">
+        INSERT INTO POKEMON
+        (name, type1, hp, attack, defense, speed)
+        VALUES
+        (#{name}, #{type1}, #{hp}, ${attack}, ${defense}, ${speed})
+    </insert>
+
+    <update id="updatePokemonStatus">
+        UPDATE POKEMON
+        SET
+        hp = #{pokemon.hp}
+        , attack = #{pokemon.attack}
+        , defense = #{pokemon.defense}
+        , speed = #{pokemon.speed}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM POKEMON
+        WHERE id = #{id}
+    </delete>
+
+    <!--  resultType : 결과 테이블을 어떤 자바 객체에 연결할건지  -->
+    <select id="findById" resultType="Pokemon">
+        SELECT *
+        FROM POKEMON
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultType="Pokemon">
+        SELECT *
+        FROM POKEMON
+        ORDER BY name
+    </select>
+
+    <update id="updateHp">
+        UPDATE POKEMON
+        SET hp = #{hp}
+        WHERE id = #{defenderId}
+    </update>
+
+</mapper>
