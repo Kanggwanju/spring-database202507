@@ -1,4 +1,4 @@
-package com.spring.database.chap01.pokemon.entity;
+package com.spring.database.pokemon.entity;
 
 import lombok.*;
 

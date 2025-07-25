@@ -1,7 +1,7 @@
-package com.spring.database.chap01.pokemon.api;
+package com.spring.database.pokemon.api;
 
-import com.spring.database.chap01.pokemon.entity.Pokemon;
-import com.spring.database.chap01.pokemon.repository.PokemonRepository;
+import com.spring.database.pokemon.entity.Pokemon;
+import com.spring.database.pokemon.repository.PokemonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;

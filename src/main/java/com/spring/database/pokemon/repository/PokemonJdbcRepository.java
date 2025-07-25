@@ -1,6 +1,6 @@
-package com.spring.database.chap01.pokemon.repository;
+package com.spring.database.pokemon.repository;
 
-import com.spring.database.chap01.pokemon.entity.Pokemon;
+import com.spring.database.pokemon.entity.Pokemon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
