@@ -10,4 +10,9 @@ public class PokemonRouteController {
     public String pokemonPage() {
         return "pokemon-page";
     }
+
+    @GetMapping("/pokemonV2-page")
+    public String pokemonV2Page() {
+        return "pokemonV2-page";
+    }
 }

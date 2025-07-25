@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>포켓몬 관리 페이지 V2</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+            background-color: #f2f2f2;
+        }
+        h1, h2 {
+            color: #444;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            padding: 5px;
+            width: 200px;
+        }
+        .pokemon-list, .battle-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .pokemon-card {
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 180px;
+        }
+        .pokemon-card:hover {
+            background-color: #e0f7fa;
+            cursor: pointer;
+        }
+        .buttons {
+            margin-top: 10px;
+        }
+        .buttons button {
+            margin-right: 5px;
+        }
+        .battle-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .hp-bar {
+            height: 10px;
+            background-color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>포켓몬 관리 페이지 V2</h1>
+
+    <div class="search-box">
+        <input type="text" id="searchId" placeholder="ID로 포켓몬 검색">
+        <button onclick="searchPokemon()">검색</button>
+    </div>
+
+    <h2>포켓몬 목록</h2>
+    <div class="pokemon-list" id="pokemonList"></div>
+
+    <h2>⚔️ 대결 페이지</h2>
+    <div class="battle-container">
+        <div>
+            <h3>Attacker</h3>
+            <select id="attackerSelect"></select>
+        </div>
+        <div>
+            <h3>Defender</h3>
+            <select id="defenderSelect"></select>
+        </div>
+        <div>
+            <button onclick="startBattle()">공격!</button>
+        </div>
+    </div>
+
+    <div class="battle-area" id="battleArea"></div>
+
+    <script>
+      const baseUrl = "http://localhost:9001/api/v2/pokemon";
+
+      async function fetchAll() {
+        const res = await fetch(baseUrl);
+        const data = await res.json();
+        renderList(data);
+        populateSelectOptions(data);
+      }
+
+      function renderList(pokemons) {
+        const container = document.getElementById("pokemonList");
+        container.innerHTML = "";
+        pokemons.forEach(p => {
+          const card = document.createElement("div");
+          card.className = "pokemon-card";
+          card.innerHTML = `
+                    <strong>${p.name}</strong><br>
+                    ID: ${p.id}<br>
+                    HP: ${p.hp}<br>
+                    ATK: ${p.attack}<br>
+                    DEF: ${p.defense}<br>
+                    SPD: ${p.speed}<br>
+                    <div class="buttons">
+                        <button onclick="deletePokemon(${p.id})">삭제</button>
+                        <button onclick="editPokemon(${p.id})">수정</button>
+                        <button onclick="showDetail(${p.id})">상세</button>
+                    </div>
+                `;
+          container.appendChild(card);
+        });
+      }
+
+      async function deletePokemon(id) {
+        if (!confirm("정말 삭제할까요?")) return;
+        await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
+        fetchAll();
+      }
+
+      async function showDetail(id) {
+        const res = await fetch(`${baseUrl}/${id}`);
+        const p = await res.json();
+        alert(`이름: ${p.name}\nHP: ${p.hp}\n공격력: ${p.attack}\n방어력: ${p.defense}\n속도: ${p.speed}`);
+      }
+
+      function editPokemon(id) {
+        fetch(`${baseUrl}/${id}`)
+          .then(res => res.json())
+          .then(pokemon => {
+            const newHp = prompt("새 HP를 입력하세요:", pokemon.hp);
+            const newAtk = prompt("새 공격력을 입력하세요:", pokemon.attack);
+            const newDef = prompt("새 방어력을 입력하세요:", pokemon.defense);
+            const newSpd = prompt("새 스피드를 입력하세요:", pokemon.speed);
+
+            if (newHp && newAtk && newDef && newSpd) {
+              fetch(`${baseUrl}/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  hp: parseInt(newHp),
+                  attack: parseInt(newAtk),
+                  defense: parseInt(newDef),
+                  speed: parseInt(newSpd)
+                })
+              }).then(() => fetchAll());
+            }
+          });
+      }
+
+      async function searchPokemon() {
+        const id = document.getElementById("searchId").value;
+        if (!id) return;
+        const res = await fetch(`${baseUrl}/${id}`);
+        const p = await res.json();
+        alert(`검색 결과:\n이름: ${p.name}\nHP: ${p.hp}`);
+      }
+
+      function populateSelectOptions(pokemons) {
+        const attackerSelect = document.getElementById("attackerSelect");
+        const defenderSelect = document.getElementById("defenderSelect");
+        attackerSelect.innerHTML = "";
+        defenderSelect.innerHTML = "";
+
+        pokemons.forEach(p => {
+          const option1 = document.createElement("option");
+          const option2 = document.createElement("option");
+          option1.value = p.id;
+          option1.textContent = `${p.name} (ID: ${p.id})`;
+          option2.value = p.id;
+          option2.textContent = `${p.name} (ID: ${p.id})`;
+          attackerSelect.appendChild(option1);
+          defenderSelect.appendChild(option2);
+        });
+      }
+
+      async function startBattle() {
+        const attackerId = document.getElementById("attackerSelect").value;
+        const defenderId = document.getElementById("defenderSelect").value;
+        if (attackerId === defenderId) return alert("서로 다른 포켓몬을 선택해주세요.");
+
+        await fetch(`${baseUrl}/attack?attackerId=${attackerId}&defenderId=${defenderId}`, { method: "POST" });
+
+        const defender = await fetch(`${baseUrl}/${defenderId}`).then(r => r.json());
+
+        const battleArea = document.getElementById("battleArea");
+        battleArea.innerHTML = `
+                <div>
+                    <strong>🎯 공격 성공!</strong><br>
+                    <span>Defender 남은 HP: ${defender.hp}</span>
+                    <div class="hp-bar" style="width: ${defender.hp}px;"></div>
+                </div>
+            `;
+        fetchAll();
+      }
+
+      window.onload = fetchAll;
+    </script>
+</body>
+</html>
