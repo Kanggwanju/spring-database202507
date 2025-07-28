@@ -6,6 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+/*CREATE TABLE pokemon (
+    id BIGINT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL COMMENT '포켓몬 이름',
+    type1 VARCHAR(50) NOT NULL COMMENT '타입 1',
+    hp INT NOT NULL COMMENT 'HP',
+    attack INT NOT NULL COMMENT '공격력',
+    defense INT NOT NULL COMMENT '방어력',
+    speed INT NOT NULL COMMENT '속도',
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='포켓몬 정보';*/
+
 @Getter
 @Setter
 @ToString
