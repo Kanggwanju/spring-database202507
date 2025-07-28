@@ -1,4 +1,4 @@
-package com.spring.database.pokemon.routes;
+package com.spring.database.chap03.pokemon.routes;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

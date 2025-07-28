@@ -1,6 +1,6 @@
-package com.spring.database.pokemon.service;
+package com.spring.database.chap03.pokemon.service;
 
-import com.spring.database.pokemon.entity.Pokemon;
+import com.spring.database.chap03.pokemon.entity.Pokemon;
 
 import java.util.List;
 

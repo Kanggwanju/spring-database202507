@@ -1,7 +1,7 @@
-package com.spring.database.pokemon.api;
+package com.spring.database.chap03.pokemon.api;
 
-import com.spring.database.pokemon.entity.Pokemon;
-import com.spring.database.pokemon.service.PokemonService;
+import com.spring.database.chap03.pokemon.entity.Pokemon;
+import com.spring.database.chap03.pokemon.service.PokemonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

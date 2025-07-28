@@ -1,6 +1,6 @@
-package com.spring.database.pokemon;
+package com.spring.database.chap03.pokemon;
 
-import com.spring.database.pokemon.entity.Pokemon;
+import com.spring.database.chap03.pokemon.entity.Pokemon;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,6 +1,7 @@
 package com.spring.database.pokemon;
 
-import com.spring.database.pokemon.entity.Pokemon;
+import com.spring.database.chap03.pokemon.PokemonMapper;
+import com.spring.database.chap03.pokemon.entity.Pokemon;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

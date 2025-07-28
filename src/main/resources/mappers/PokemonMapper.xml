@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- namespace에는 연결할 인터페이스의 풀네임(패키지명+클래스명)을 작성 -->
-<mapper namespace="com.spring.database.pokemon.PokemonMapper">
+<mapper namespace="com.spring.database.chap03.pokemon.PokemonMapper">
 
     <!--  id에는 연결된 인터페이스의 추상메서드 이름을 정확하게 적음  -->
     <insert id="save">

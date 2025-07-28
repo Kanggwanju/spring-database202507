@@ -1,13 +1,13 @@
-package com.spring.database.pokemon.repository;
+package com.spring.database.chap03.pokemon.repository;
 
-import com.spring.database.pokemon.entity.Pokemon;
+import com.spring.database.chap03.pokemon.entity.Pokemon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.spring.database.pokemon.repository.PokemonJdbcRepository.performAttack;
+import static com.spring.database.chap03.pokemon.repository.PokemonJdbcRepository.performAttack;
 
 @Repository("psr")
 @RequiredArgsConstructor

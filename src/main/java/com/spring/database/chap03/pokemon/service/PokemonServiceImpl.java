@@ -1,7 +1,7 @@
-package com.spring.database.pokemon.service;
+package com.spring.database.chap03.pokemon.service;
 
-import com.spring.database.pokemon.PokemonMapper;
-import com.spring.database.pokemon.entity.Pokemon;
+import com.spring.database.chap03.pokemon.PokemonMapper;
+import com.spring.database.chap03.pokemon.entity.Pokemon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
