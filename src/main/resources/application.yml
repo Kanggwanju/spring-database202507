@@ -10,8 +10,6 @@ spring:
     username: root
     password: mariadb
   jpa:
-    # Hibernate가 MariaDB 10.6 버전 이상에 맞는 SQL 문법을 사용하게 하는 설정
-    database-platform: org.hibernate.dialect.MariaDB106Dialect
     hibernate:
       ddl-auto: create # sql 자동 생성
     properties:
