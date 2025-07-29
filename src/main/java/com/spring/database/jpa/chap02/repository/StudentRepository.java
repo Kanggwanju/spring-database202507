@@ -1,4 +1,4 @@
-package com.spring.database.jpa.chap02;
+package com.spring.database.jpa.chap02.repository;
 
 import com.spring.database.jpa.chap02.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
