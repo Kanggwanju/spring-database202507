@@ -38,7 +38,8 @@ public class Employee {
     public void changeDepartment(Department department) {
         // ManyToOne 필드가 변경이 일어나면 반대편쪽의 OneToMany도 같이 갱신
         this.department = department;
-        department.getEmployees().add(this);
-
+        if (department != null) {
+            department.getEmployees().add(this);
+        }
     }
 }
