@@ -6,7 +6,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"department"})
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +27,8 @@ public class Employee {
     
     // DBMS처럼 한쪽(N쪽)에 상대의 데이터를 포함시키는 전략
     // -> 단방향 매핑
-    @ManyToOne
+    // ManyToOne은 무조건 LAZY를 걸어라
+    @ManyToOne(fetch = FetchType.LAZY) // 필요없을 때는 조인을 하지 않는 전략
     @JoinColumn(name = "dept_id") // FK를 포함시키는건 DB 패러다임에 맞춰야함
     private Department department; // 부서정보 통째로 포함
 }
