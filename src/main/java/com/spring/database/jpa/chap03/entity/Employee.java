@@ -6,6 +6,7 @@ import lombok.*;
 
 @Getter
 @Setter
+// 연관관계 필드는 순환참조 방지를 위해 제외해야 함
 @ToString(exclude = {"department"})
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -31,4 +32,13 @@ public class Employee {
     @ManyToOne(fetch = FetchType.LAZY) // 필요없을 때는 조인을 하지 않는 전략
     @JoinColumn(name = "dept_id") // FK를 포함시키는건 DB 패러다임에 맞춰야함
     private Department department; // 부서정보 통째로 포함
+
+
+    // 부서 변경 편의 메서드
+    public void changeDepartment(Department department) {
+        // ManyToOne 필드가 변경이 일어나면 반대편쪽의 OneToMany도 같이 갱신
+        this.department = department;
+        department.getEmployees().add(this);
+
+    }
 }
