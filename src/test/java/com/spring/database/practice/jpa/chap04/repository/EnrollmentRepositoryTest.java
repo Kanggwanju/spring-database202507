@@ -67,12 +67,7 @@ class EnrollmentRepositoryTest {
         courseRepository.saveAllAndFlush(
                 List.of(course1, course2, course3)
         );
-    }
 
-    @Test
-    @DisplayName("1. 기본 데이터 생성 및 조회")
-    void saveAndFindTest() {
-        //given
         Enrollment enrollment = Enrollment.builder()
                 .progressRate(25)
                 .completed(false)
@@ -92,15 +87,22 @@ class EnrollmentRepositoryTest {
                 .student(student2)
                 .course(course1)
                 .build();
-        //when
+
         Enrollment saved = enrollmentRepository.save(enrollment);
         Enrollment saved2 = enrollmentRepository.save(enrollment2);
         Enrollment saved3 = enrollmentRepository.save(enrollment3);
 
         em.flush();
         em.clear();
+    }
 
+    @Test
+    @DisplayName("1. 기본 데이터 생성 및 조회")
+    void saveAndFindTest() {
+        //given
         List<Enrollment> enrollments = enrollmentRepository.findAll();
+
+        //when
 
         // 하치와레가 수강신청한 강의 수
         long hachiCount = enrollments.stream()
@@ -124,33 +126,16 @@ class EnrollmentRepositoryTest {
     @DisplayName("하치와레의 \"Spring Boot\" 수강신청의 진도율을 85%로 업데이트")
     void updateTest() {
         //given
-        Enrollment enrollment = Enrollment.builder()
-                .progressRate(25)
-                .completed(false)
-                .student(student1)
-                .course(course1)
-                .build();
 
-        Enrollment enrollment2 = Enrollment.builder()
-                .progressRate(50)
-                .completed(true)
-                .student(student1)
-                .course(course2)
-                .build();
-
-        Enrollment saved = enrollmentRepository.save(enrollment);
-        Enrollment saved2 = enrollmentRepository.save(enrollment2);
-
-        em.flush();
-        em.clear();
-
-        //when
         // 학생 이름과 과목 이름으로 Enrollment를 찾음
         List<Enrollment> founds = enrollmentRepository
                 .getEnrollmentByNameAndTitle("하치와레", "Spring Boot");
 
         // selectedEnrollment는 영속 상태 (find 등으로 조회한 객체)
         Enrollment selectedEnrollment = founds.get(0);
+
+
+        //when
 
         // JPA가 영속성 컨텍스트에서 해당 객체가 변경되었음을 감지
         // -> em.flush() 혹은 커밋 시점에 UPDATE SQL 실행
@@ -184,6 +169,18 @@ class EnrollmentRepositoryTest {
         assertEquals(85, fen.getProgressRate());
         */
     }
+
+
+    @Test
+    @DisplayName("완료된 수강신청 조회")
+    void findCompletedEnrollmentTest() {
+        //given
+
+        //when
+
+        //then
+    }
+
 
 
 
