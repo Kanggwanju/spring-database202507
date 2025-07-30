@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,20 +71,20 @@ class EnrollmentRepositoryTest {
 
         Enrollment enrollment = Enrollment.builder()
                 .progressRate(25)
-                .completed(false)
+                .completed(true)
                 .student(student1)
                 .course(course1)
                 .build();
 
         Enrollment enrollment2 = Enrollment.builder()
                 .progressRate(50)
-                .completed(true)
+                .completed(false)
                 .student(student1)
                 .course(course2)
                 .build();
         Enrollment enrollment3 = Enrollment.builder()
                 .progressRate(75)
-                .completed(false)
+                .completed(true)
                 .student(student2)
                 .course(course1)
                 .build();
@@ -175,14 +176,68 @@ class EnrollmentRepositoryTest {
     @DisplayName("완료된 수강신청 조회")
     void findCompletedEnrollmentTest() {
         //given
+        List<Enrollment> enrollments = enrollmentRepository.findAll();
 
         //when
+        // 하치와레의 "React 심화" 수강신청을 완료상태로 변경
+        enrollments.stream()
+                .filter(e ->
+                        e.getCourse().getTitle().equals("React 심화") &&
+                        e.getStudent().getName().equals("하치와레")
+                )
+                .forEach(e -> e.setCompleted(true));
+
+        // UPDATE SQL 실행!
+        em.flush();
+        em.clear();
 
         //then
+        // completed가 true인 수강신청만 조회했을 때 3건인지 확인
+        long count = enrollmentRepository.findAll().stream()
+                .filter(e -> e.getCompleted() == true)
+                .count();
+
+        assertEquals(3, count);
     }
 
+    
+    @Test
+    @DisplayName("진도율 기준 조회")
+    void findByProgressRateTest() {
+        //given
+        List<Enrollment> enrollments = enrollmentRepository.findAll();
 
+        //when
+        long count = enrollments.stream()
+                .filter(e -> e.getProgressRate() >= 70)
+                .count();
 
+        //then
+        assertEquals(1, count);
+    }
+    
+    
+    @Test
+    @DisplayName("연관관계 삭제")
+    void deleteTest() {
+        //given
+        Course course = courseRepository.findById(1L).orElseThrow();
+        List<Enrollment> enrollments = course.getEnrollments();
 
+        // 과목1의 수강신청 리스트 확인
+        System.out.println("\n\ncourse1's enrollments = " + enrollments);
+
+        //when
+        courseRepository.delete(course);
+
+        em.flush();
+        em.clear();
+        
+        //then
+        List<Enrollment> enrollmentList = enrollmentRepository.findAll();
+        System.out.println("\n\nafter user deletion enrollmentList = " + enrollmentList);
+        assertEquals(1, enrollmentList.size());
+
+    }
 
 }
