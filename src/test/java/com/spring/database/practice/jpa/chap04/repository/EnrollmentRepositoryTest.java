@@ -86,23 +86,37 @@ class EnrollmentRepositoryTest {
                 .student(student1)
                 .course(course2)
                 .build();
+        Enrollment enrollment3 = Enrollment.builder()
+                .progressRate(75)
+                .completed(false)
+                .student(student2)
+                .course(course1)
+                .build();
         //when
         Enrollment saved = enrollmentRepository.save(enrollment);
         Enrollment saved2 = enrollmentRepository.save(enrollment2);
+        Enrollment saved3 = enrollmentRepository.save(enrollment3);
 
         em.flush();
         em.clear();
 
-        //then
         List<Enrollment> enrollments = enrollmentRepository.findAll();
-        enrollments.forEach(e -> {
-            System.out.println("e.getCourse() + e.getStudent() = " + e.getCourse() + e.getStudent());
-        });
-//        Student student = studentRepository.findById(saved.getStudent().getId()).orElseThrow();
-//        Course course = courseRepository.findById(saved.getCourse().getId()).orElseThrow();
-//
-//        System.out.println("student = " + student);
-//        System.out.println("course = " + course);
+
+        // 하치와레가 수강신청한 강의 수
+        long hachiCount = enrollments.stream()
+                .filter(e -> e.getStudent().getName().equals("하치와레"))
+                .count();
+
+        // Spring Boot 강의를 수강신청한 학생 수
+        long springBootCount = enrollments.stream()
+                .filter(e -> e.getCourse().getTitle().equals("Spring Boot"))
+                .count();
+
+        //then
+        assertEquals(2, hachiCount);
+        System.out.println("\n\n하치와레가 수강신청한 강의수 = " + hachiCount);
+        assertEquals(2, springBootCount);
+        System.out.println("\n\nSpring Boot 강의를 수강신청한 학생수 = " + springBootCount);
     }
 
 
