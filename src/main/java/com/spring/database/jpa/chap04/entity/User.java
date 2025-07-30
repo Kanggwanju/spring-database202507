@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString(exclude = {"purchase"})
+@ToString(exclude = {"purchases"})
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
