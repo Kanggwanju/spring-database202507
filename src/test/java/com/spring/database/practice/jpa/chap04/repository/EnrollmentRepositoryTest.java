@@ -2,6 +2,7 @@ package com.spring.database.practice.jpa.chap04.repository;
 
 import com.spring.database.jpa.pokemon.service.PokemonServiceJpa;
 import com.spring.database.practice.jpa.chap04.entity.Course;
+import com.spring.database.practice.jpa.chap04.entity.Enrollment;
 import com.spring.database.practice.jpa.chap04.entity.Student;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,12 +73,104 @@ class EnrollmentRepositoryTest {
     @DisplayName("1. 기본 데이터 생성 및 조회")
     void saveAndFindTest() {
         //given
+        Enrollment enrollment = Enrollment.builder()
+                .progressRate(25)
+                .completed(false)
+                .student(student1)
+                .course(course1)
+                .build();
 
-
+        Enrollment enrollment2 = Enrollment.builder()
+                .progressRate(50)
+                .completed(true)
+                .student(student1)
+                .course(course2)
+                .build();
         //when
+        Enrollment saved = enrollmentRepository.save(enrollment);
+        Enrollment saved2 = enrollmentRepository.save(enrollment2);
+
+        em.flush();
+        em.clear();
 
         //then
+        List<Enrollment> enrollments = enrollmentRepository.findAll();
+        enrollments.forEach(e -> {
+            System.out.println("e.getCourse() + e.getStudent() = " + e.getCourse() + e.getStudent());
+        });
+//        Student student = studentRepository.findById(saved.getStudent().getId()).orElseThrow();
+//        Course course = courseRepository.findById(saved.getCourse().getId()).orElseThrow();
+//
+//        System.out.println("student = " + student);
+//        System.out.println("course = " + course);
     }
+
+
+    @Test
+    @DisplayName("하치와레의 \"Spring Boot\" 수강신청의 진도율을 85%로 업데이트")
+    void updateTest() {
+        //given
+        Enrollment enrollment = Enrollment.builder()
+                .progressRate(25)
+                .completed(false)
+                .student(student1)
+                .course(course1)
+                .build();
+
+        Enrollment enrollment2 = Enrollment.builder()
+                .progressRate(50)
+                .completed(true)
+                .student(student1)
+                .course(course2)
+                .build();
+
+        Enrollment saved = enrollmentRepository.save(enrollment);
+        Enrollment saved2 = enrollmentRepository.save(enrollment2);
+
+        em.flush();
+        em.clear();
+
+        //when
+        // 학생 이름과 과목 이름으로 Enrollment를 찾음
+        List<Enrollment> founds = enrollmentRepository
+                .getEnrollmentByNameAndTitle("하치와레", "Spring Boot");
+
+        // selectedEnrollment는 영속 상태 (find 등으로 조회한 객체)
+        Enrollment selectedEnrollment = founds.get(0);
+
+        // JPA가 영속성 컨텍스트에서 해당 객체가 변경되었음을 감지
+        // -> em.flush() 혹은 커밋 시점에 UPDATE SQL 실행
+        selectedEnrollment.setProgressRate(85);
+
+        // UPDATE SQL 실행!
+        em.flush();
+        em.clear();
+
+        //then
+        Enrollment updated = enrollmentRepository
+                .findById(selectedEnrollment.getId())
+                .orElseThrow();
+
+        assertEquals(85, updated.getProgressRate());
+        System.out.println("수정된 진도율 = " + updated.getProgressRate());
+
+
+        /*
+        //when
+        Enrollment found = enrollmentRepository
+                .findByStudentNameAndCourseTitle("하치와레", "Spring Boot")
+                .orElseThrow();
+
+        found.setProgressRate(85);
+        em.flush();
+        em.clear();
+        Enrollment fen = enrollmentRepository.findById(1L).orElseThrow();
+
+        //then
+        assertEquals(85, fen.getProgressRate());
+        */
+    }
+
 
 
 
