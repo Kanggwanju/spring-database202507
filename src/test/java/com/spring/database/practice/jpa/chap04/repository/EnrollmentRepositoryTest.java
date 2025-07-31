@@ -3,7 +3,7 @@ package com.spring.database.practice.jpa.chap04.repository;
 import com.spring.database.jpa.chap04.pokemon.service.PokemonServiceJpa;
 import com.spring.database.practice.jpa.chap04.entity.Course;
 import com.spring.database.practice.jpa.chap04.entity.Enrollment;
-import com.spring.database.practice.jpa.chap04.entity.Student;
+import com.spring.database.practice.jpa.chap04.entity.MtmStudent;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ class EnrollmentRepositoryTest {
     EnrollmentRepository enrollmentRepository;
 
     @Autowired
-    StudentRepository studentRepository;
+    StudentMtmRepository studentMtmRepository;
 
     @Autowired
     CourseRepository courseRepository;
@@ -42,24 +42,24 @@ class EnrollmentRepositoryTest {
     @MockBean
     PokemonServiceJpa pokemonServiceJpa;
 
-    private Student student1;
-    private Student student2;
-    private Student student3;
+    private MtmStudent student1;
+    private MtmStudent student2;
+    private MtmStudent student3;
     private Course course1;
     private Course course2;
     private Course course3;
 
     @BeforeEach
     void setUp() {
-        student1 = Student.builder().name("하치와레").email("123@naver.com").build();
-        student2 = Student.builder().name("치이카와").email("1234@google.com").build();
-        student3 = Student.builder().name("우사기").email("AAA@naver.com").build();
+        student1 = MtmStudent.builder().name("하치와레").email("123@naver.com").build();
+        student2 = MtmStudent.builder().name("치이카와").email("1234@google.com").build();
+        student3 = MtmStudent.builder().name("우사기").email("AAA@naver.com").build();
 
         course1 = Course.builder().title("Spring Boot").instructor("김철수").price(3000).build();
         course2 = Course.builder().title("React 심화").instructor("이영희").price(4000).build();
         course3 = Course.builder().title("SQL").instructor("홍순구").price(5000).build();
 
-        studentRepository.saveAllAndFlush(
+        studentMtmRepository.saveAllAndFlush(
                 List.of(student1, student2, student3)
         );
 
@@ -70,20 +70,20 @@ class EnrollmentRepositoryTest {
         Enrollment enrollment = Enrollment.builder()
                 .progressRate(25)
                 .completed(true)
-                .student(student1)
+                .mtmStudent(student1)
                 .course(course1)
                 .build();
 
         Enrollment enrollment2 = Enrollment.builder()
                 .progressRate(50)
                 .completed(false)
-                .student(student1)
+                .mtmStudent(student1)
                 .course(course2)
                 .build();
         Enrollment enrollment3 = Enrollment.builder()
                 .progressRate(75)
                 .completed(true)
-                .student(student2)
+                .mtmStudent(student2)
                 .course(course1)
                 .build();
 
@@ -105,7 +105,7 @@ class EnrollmentRepositoryTest {
 
         // 하치와레가 수강신청한 강의 수
         long hachiCount = enrollments.stream()
-                .filter(e -> e.getStudent().getName().equals("하치와레"))
+                .filter(e -> e.getMtmStudent().getName().equals("하치와레"))
                 .count();
 
         // Spring Boot 강의를 수강신청한 학생 수
@@ -181,7 +181,7 @@ class EnrollmentRepositoryTest {
         enrollments.stream()
                 .filter(e ->
                         e.getCourse().getTitle().equals("React 심화") &&
-                        e.getStudent().getName().equals("하치와레")
+                        e.getMtmStudent().getName().equals("하치와레")
                 )
                 .forEach(e -> e.setCompleted(true));
 

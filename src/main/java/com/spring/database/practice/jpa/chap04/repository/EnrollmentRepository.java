@@ -25,7 +25,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     // 학생 이름과 과목 이름으로 Enrollment 조회
     @Query(value = """
                     SELECT e FROM Enrollment e
-                    WHERE e.student.name = ?1
+                    WHERE e.mtmStudent.name = ?1
                         AND e.course.title = ?2
                     """)
     List<Enrollment> getEnrollmentByNameAndTitle(String name, String title);

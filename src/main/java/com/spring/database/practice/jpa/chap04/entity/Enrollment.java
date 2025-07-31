@@ -35,7 +35,7 @@ public class Enrollment { // 수강신청
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
-    private Student student;
+    private MtmStudent mtmStudent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")

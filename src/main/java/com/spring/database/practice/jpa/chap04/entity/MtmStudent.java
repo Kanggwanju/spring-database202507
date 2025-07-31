@@ -16,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tbl_mtm_prac_student")
-public class Student { // 학생
+public class MtmStudent { // 학생
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +29,6 @@ public class Student { // 학생
     @Column(name = "student_email")
     private String email; // 학생 이메일
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "mtmStudent", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Enrollment> enrollments = new ArrayList<>();
 }
