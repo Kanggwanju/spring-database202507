@@ -1,7 +1,7 @@
-package com.spring.database.jpa.pokemon.service;
+package com.spring.database.jpa.chap04.pokemon.service;
 
-import com.spring.database.jpa.pokemon.entity.Pokemon;
-import com.spring.database.jpa.pokemon.repository.PokemonJpaRepository;
+import com.spring.database.jpa.chap04.pokemon.entity.Pokemon;
+import com.spring.database.jpa.chap04.pokemon.repository.PokemonJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.spring.database.jpa.pokemon.entity;
+package com.spring.database.jpa.chap04.pokemon.entity;
 
 import com.spring.database.jpa.chap01.entity.Product;
 import jakarta.persistence.*;

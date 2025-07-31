@@ -1,9 +1,8 @@
-package com.spring.database.jpa.pokemon.service;
+package com.spring.database.jpa.chap04.pokemon.service;
 
-import com.spring.database.jpa.pokemon.entity.Pokemon;
+import com.spring.database.jpa.chap04.pokemon.entity.Pokemon;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PokemonService {
     List<Pokemon> findAll();

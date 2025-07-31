@@ -1,6 +1,6 @@
 package com.spring.database.practice.jpa.chap04.repository;
 
-import com.spring.database.jpa.pokemon.service.PokemonServiceJpa;
+import com.spring.database.jpa.chap04.pokemon.service.PokemonServiceJpa;
 import com.spring.database.practice.jpa.chap04.entity.Course;
 import com.spring.database.practice.jpa.chap04.entity.Enrollment;
 import com.spring.database.practice.jpa.chap04.entity.Student;
@@ -16,9 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,6 +1,6 @@
-package com.spring.database.jpa.pokemon.repository;
+package com.spring.database.jpa.chap04.pokemon.repository;
 
-import com.spring.database.jpa.pokemon.entity.Pokemon;
+import com.spring.database.jpa.chap04.pokemon.entity.Pokemon;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

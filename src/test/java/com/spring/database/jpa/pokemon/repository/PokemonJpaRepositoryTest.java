@@ -1,8 +1,8 @@
 package com.spring.database.jpa.pokemon.repository;
 
 
-import com.spring.database.jpa.chap01.entity.Product;
-import com.spring.database.jpa.pokemon.entity.Pokemon;
+import com.spring.database.jpa.chap04.pokemon.entity.Pokemon;
+import com.spring.database.jpa.chap04.pokemon.repository.PokemonJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 import java.util.List;
 
-import static com.spring.database.jpa.chap01.entity.Product.Category.ELECTRONIC;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
