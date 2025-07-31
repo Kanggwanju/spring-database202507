@@ -1,6 +1,5 @@
 package com.spring.database.practice.jpa.chap04.repository;
 
-import com.spring.database.jpa.chap04.pokemon.service.PokemonServiceJpa;
 import com.spring.database.practice.jpa.chap04.entity.Course;
 import com.spring.database.practice.jpa.chap04.entity.Enrollment;
 import com.spring.database.practice.jpa.chap04.entity.MtmStudent;
@@ -9,10 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +17,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@EnableJpaRepositories(basePackages = "com.spring.database.practice.jpa.chap04.repository")
-@EntityScan(basePackages = "com.spring.database.practice.jpa.chap04.entity")
 @Transactional
 @Rollback(false)
 class EnrollmentRepositoryTest {
@@ -38,9 +32,6 @@ class EnrollmentRepositoryTest {
 
     @Autowired
     EntityManager em;
-
-    @MockBean
-    PokemonServiceJpa pokemonServiceJpa;
 
     private MtmStudent student1;
     private MtmStudent student2;
