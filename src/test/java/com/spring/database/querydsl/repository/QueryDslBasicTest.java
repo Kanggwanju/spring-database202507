@@ -236,46 +236,87 @@ class QueryDslBasicTest {
     }
 
     @Test
-    @DisplayName("다양한 조건으로 조회하기")
-    void searchByConditionTest() {
-        
-        // 1. 나이가 24세 이상인 아이돌 조회
-        List<Idol> idolList1 = factory
+    @DisplayName("나이가 24세 이상인 아이돌 조회")
+    void testAgeGoe() {
+        // given
+        int ageThreshold = 24;
+
+        // when
+        List<Idol> result = factory
                 .selectFrom(idol)
-                .where(idol.age.goe(24))
+                .where(idol.age.goe(ageThreshold))
                 .fetch();
 
-        System.out.println("\n\n============  24세 이상 아이돌  ==============");
-        idolList1.forEach(System.out::println);
+        // then
+        assertFalse(result.isEmpty());
 
-        // 2. 이름에 "김"이라는 문자열이 포함된 아이돌을 조회하세요.
-//        idol.idolName.contains("김") // like %김%
-        List<Idol> idolList2 = factory
+        for (Idol idol : result) {
+            System.out.println("\n\nIdol: " + idol);
+            assertTrue(idol.getAge() >= ageThreshold);
+        }
+    }
+
+    @Test
+    @DisplayName("이름에 '김'이 포함된 아이돌 조회")
+    void testNameContains() {
+        // given
+        String substring = "김";
+
+        // when
+        List<Idol> result = factory
                 .selectFrom(idol)
-                .where(idol.idolName.contains("김"))
+                .where(idol.idolName.contains(substring))
                 .fetch();
 
-        System.out.println("\n\n============  \"김\"을 포함하는 아이돌  ==============");
-        idolList2.forEach(System.out::println);
-        
-        // 3. 나이가 20세에서 25세 사이인 아이돌을 조회하세요.
-        List<Idol> idolList3 = factory
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertTrue(idol.getIdolName().contains(substring));
+        }
+    }
+
+    @Test
+    @DisplayName("나이가 20세에서 25세 사이인 아이돌 조회")
+    void testAgeBetween() {
+        // given
+        int ageStart = 20;
+        int ageEnd = 25;
+
+
+        // when
+        List<Idol> result = factory
                 .selectFrom(idol)
-                .where(idol.age.between(20, 25))
+                .where(idol.age.between(ageStart, ageEnd))
                 .fetch();
 
-        System.out.println("\n\n============  나이가 20세에서 25세 사이인 아이돌  ==============");
-        idolList3.forEach(System.out::println);
-        
-        // 4. 그룹이름이 문자열 "르세라핌"인 아이돌을 조회하세요.
-        List<Idol> idolList4 = factory
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertTrue(idol.getAge() >= ageStart && idol.getAge() <= ageEnd);
+        }
+    }
+
+
+    @Test
+    @DisplayName("르세라핌 그룹에 속한 아이돌 조회")
+    void testGroupEquals() {
+        // given
+        String groupName = "르세라핌";
+
+        // when
+        List<Idol> result = factory
                 .selectFrom(idol)
-                .where(idol.group.groupName.eq("르세라핌"))
+                .where(idol.group.groupName.eq(groupName))
                 .fetch();
 
-        System.out.println("\n\n============  그룹이름이 문자열 \"르세라핌\"인 아이돌  ==============");
-        idolList4.forEach(System.out::println);
-
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertEquals(groupName, idol.getGroup().getGroupName());
+        }
     }
 
 
