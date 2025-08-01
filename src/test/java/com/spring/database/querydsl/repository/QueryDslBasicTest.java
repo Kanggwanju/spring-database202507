@@ -122,6 +122,7 @@ class QueryDslBasicTest {
                         rs.getLong("idol_id")
                         , rs.getString("idol_name")
                         , rs.getInt("age")
+                        , rs.getString("gender")
                         , null
                 ),
                 "김채원"
