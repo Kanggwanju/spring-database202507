@@ -135,6 +135,7 @@ class QueryDslBasicTest {
                         rs.getLong("group_id")
                         , rs.getString("group_name")
                         , null
+                        , null
                 ),
                 1
         );
