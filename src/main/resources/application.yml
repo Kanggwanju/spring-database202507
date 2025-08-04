@@ -11,7 +11,7 @@ spring:
     password: mariadb
   jpa:
     hibernate:
-      ddl-auto: create # sql 자동 생성
+      ddl-auto: update # sql 자동 생성
     properties:
       hibernate:
         format_sql: true # sql 세로로 써주는 옵션
